@@ -5,11 +5,17 @@ import com.anpk.firstDemoLearnSpring.domain.Entity.EmailVerificationToken;
 import com.anpk.firstDemoLearnSpring.domain.Entity.User;
 import com.anpk.firstDemoLearnSpring.domain.Enum.UserStatus;
 import com.anpk.firstDemoLearnSpring.dtos.inputs.Authenticator.RegisterRequest;
+import com.anpk.firstDemoLearnSpring.dtos.outputs.Register.RegisterUserResponse;
+import com.anpk.firstDemoLearnSpring.helpers.common.PasswordHasher;
+import com.anpk.firstDemoLearnSpring.helpers.common.TokenGenerator;
 import com.anpk.firstDemoLearnSpring.helpers.validate.PasswordValidator;
-import com.anpk.firstDemoLearnSpring.repository.EmailVerificationTokenRepository;
-import com.anpk.firstDemoLearnSpring.repository.UserRepository;
+import com.anpk.firstDemoLearnSpring.infrastructure.custom.BadRequestException;
+import com.anpk.firstDemoLearnSpring.infrastructure.custom.ConflictException;
+import com.anpk.firstDemoLearnSpring.infrastructure.persistence.repository.EmailVerificationTokenRepository;
+import com.anpk.firstDemoLearnSpring.infrastructure.persistence.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,34 +29,36 @@ public class RegisterService {
     private final EmailVerificationTokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final VerificationMailService verificationMailService;
+    private final TokenGenerator tokenGenerator;
+    private final PasswordHasher passwordHasher;
+
 
     @Transactional
     /// TODO: Implement register account .
-    public void register(RegisterRequest request) {
+    public RegisterUserResponse register(RegisterRequest request) {
 
         if(!request.getPassword().equals(request.getConfirmPassword())){
-            throw new RuntimeException("Password not match");
-        }
+            throw new BadRequestException("Mật khẩu xác nhận không khớp");        }
 
         PasswordValidator.validate(request.getPassword());
 
         if(userRepository.existsByEmail(request.getEmail())){
-            throw new RuntimeException("Email already exists");
+            throw new ConflictException("Email already exists");
         }
 
         if(userRepository.existsByUsername(request.getUsername())){
-            throw new RuntimeException("Username already exists");
+            throw new ConflictException("Username already exists");
         }
 
         User user = new User();
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
-        user.setPasswordHash(passwordEncoder.encode(request.getPassword()));
+        user.setPasswordHash(passwordHasher.hash(request.getPassword()));
         user.setStatus(UserStatus.PENDING);
 
         userRepository.save(user);
 
-        String token = UUID.randomUUID().toString();
+        String token = tokenGenerator.generateVerificationToken();
         EmailVerificationToken verificationToken = new EmailVerificationToken();
         verificationToken.setToken(token);
         verificationToken.setUser(user);
@@ -62,20 +70,24 @@ public class RegisterService {
                 user.getUsername(),
                 token
         );
+        return  RegisterUserResponse.builder()
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .status(user.getStatus().name()).build();
     }
     ///  Dùng để xác thực email khi người dùng click vào link trong email.
     public void verifyEmailToken(String token) {
         EmailVerificationToken verificationToken = tokenRepository.findByToken(token)
-                .orElseThrow(() -> new RuntimeException("Token xác thực không hợp lệ"));
+                .orElseThrow(() -> new BadRequestException("Token xác thực không hợp lệ"));
         // nếu token đã hết hạn, xóa token khỏi database và trả về lỗi.
         if (verificationToken.getExpiredAt().isBefore(LocalDateTime.now())) {
             tokenRepository.delete(verificationToken);
-            throw new RuntimeException("Token xác thực đã hết hạn");
+            throw new ConflictException("Token xác thực đã hết hạn");
         }
         // Nếu token hợp lệ, kích hoạt tài khoản người dùng và xóa token khỏi database.
         User user = verificationToken.getUser();
         user.setStatus(UserStatus.ACTIVE);
         userRepository.save(user);
-        tokenRepository.delete(verificationToken);
+        //tokenRepository.delete(verificationToken);
     }
 }

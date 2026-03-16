@@ -1,4 +1,4 @@
-package com.anpk.firstDemoLearnSpring.helpers.templates;
+package com.anpk.firstDemoLearnSpring.infrastructure.templates;
 
 public final class RegisterEmailTemplate {
     private static final String TEMPLATE = """

@@ -1,5 +1,6 @@
-package com.anpk.firstDemoLearnSpring.config;
+package com.anpk.firstDemoLearnSpring.infrastructure.config.models;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;

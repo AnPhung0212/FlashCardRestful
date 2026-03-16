@@ -1,4 +1,4 @@
-package com.anpk.firstDemoLearnSpring.scheduler;
+package com.anpk.firstDemoLearnSpring.infrastructure.scheduler;
 
 import com.anpk.firstDemoLearnSpring.Services.scheduler.UserCleanupService;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ public class UserCleanupScheduler {
      * Chạy mỗi 10 giây để test
      * Sau khi test xong, đổi thành: fixedRate = 3600000 (mỗi 1 giờ)
      */
-    @Scheduled(fixedRate = 10000)
+    @Scheduled(fixedRate = 60000)
     public void cleanupExpiredPendingUsers() {
         try {
             log.info("=== BẮT ĐẦU TÁC VỤ TỰ ĐỘNG: Xóa user PENDING quá hạn ===");

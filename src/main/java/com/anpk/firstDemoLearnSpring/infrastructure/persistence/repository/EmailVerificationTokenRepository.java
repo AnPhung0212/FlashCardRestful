@@ -1,4 +1,4 @@
-package com.anpk.firstDemoLearnSpring.repository;
+package com.anpk.firstDemoLearnSpring.infrastructure.persistence.repository;
 
 import com.anpk.firstDemoLearnSpring.domain.Entity.EmailVerificationToken;
 import org.springframework.data.jpa.repository.JpaRepository;

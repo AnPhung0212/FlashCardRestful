@@ -1,7 +1,7 @@
 package com.anpk.firstDemoLearnSpring.Services.MailService;
 
-import com.anpk.firstDemoLearnSpring.config.MailProperties;
-import com.anpk.firstDemoLearnSpring.helpers.templates.RegisterEmailTemplate;
+import com.anpk.firstDemoLearnSpring.infrastructure.config.models.MailProperties;
+import com.anpk.firstDemoLearnSpring.infrastructure.templates.RegisterEmailTemplate;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;

@@ -2,6 +2,8 @@ package com.anpk.firstDemoLearnSpring.controllers.Authenticator;
 
 import com.anpk.firstDemoLearnSpring.Services.Authentication.RegisterService;
 import com.anpk.firstDemoLearnSpring.dtos.inputs.Authenticator.RegisterRequest;
+import com.anpk.firstDemoLearnSpring.dtos.outputs.ApiResponse;
+import com.anpk.firstDemoLearnSpring.dtos.outputs.Register.RegisterUserResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -18,23 +20,24 @@ public class AuthController {
 
     @PostMapping("/register")
     @Operation(summary = "Đăng ký tài khoản mới", description = "Tạo tài khoản và gửi email xác thực")
-    public ResponseEntity<String> register(@Valid @RequestBody RegisterRequest request) {
-        try {
-            registerService.register(request);
-            return ResponseEntity.ok("Đăng ký thành công! Vui lòng kiểm tra email để xác thực tài khoản.");
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<ApiResponse<RegisterUserResponse>> register(@Valid @RequestBody RegisterRequest request) {
+
+        RegisterUserResponse data = registerService.register(request);
+        ApiResponse<RegisterUserResponse> response =
+                new ApiResponse<>("Đăng ký thành công! Vui lòng kiểm tra email để xác thực tài khoản.", data);
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/verify")
     @Operation(summary = "Xác thực email", description = "Kích hoạt tài khoản thông qua token trong email")
-    public ResponseEntity<String> verifyEmail(@RequestParam String token) {
-        try {
-            registerService.verifyEmailToken(token);
-            return ResponseEntity.ok("Xác thực tài khoản thành công! Bạn có thể đăng nhập.");
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<ApiResponse<String>> verifyEmail(@RequestParam String token) {
+
+        registerService.verifyEmailToken(token);
+
+        ApiResponse<String> response =
+                new ApiResponse<>("Xác thực tài khoản thành công! Bạn có thể đăng nhập.", null);
+
+        return ResponseEntity.ok(response);
     }
 }
