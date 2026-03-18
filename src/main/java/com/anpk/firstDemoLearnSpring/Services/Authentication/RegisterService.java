@@ -4,7 +4,7 @@ import com.anpk.firstDemoLearnSpring.Services.MailService.VerificationMailServic
 import com.anpk.firstDemoLearnSpring.domain.Entity.EmailVerificationToken;
 import com.anpk.firstDemoLearnSpring.domain.Entity.User;
 import com.anpk.firstDemoLearnSpring.domain.Enum.UserStatus;
-import com.anpk.firstDemoLearnSpring.dtos.inputs.Authenticator.RegisterRequest;
+import com.anpk.firstDemoLearnSpring.dtos.inputs.Authentication.RegisterRequest;
 import com.anpk.firstDemoLearnSpring.dtos.outputs.Register.RegisterUserResponse;
 import com.anpk.firstDemoLearnSpring.helpers.common.PasswordHasher;
 import com.anpk.firstDemoLearnSpring.helpers.common.TokenGenerator;
@@ -15,12 +15,10 @@ import com.anpk.firstDemoLearnSpring.infrastructure.persistence.repository.Email
 import com.anpk.firstDemoLearnSpring.infrastructure.persistence.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor

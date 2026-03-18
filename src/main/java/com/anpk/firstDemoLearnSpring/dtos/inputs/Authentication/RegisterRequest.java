@@ -1,4 +1,4 @@
-package com.anpk.firstDemoLearnSpring.dtos.inputs.Authenticator;
+package com.anpk.firstDemoLearnSpring.dtos.inputs.Authentication;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

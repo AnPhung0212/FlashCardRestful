@@ -1,8 +1,8 @@
 package com.anpk.firstDemoLearnSpring.controllers.Authenticator;
 
 import com.anpk.firstDemoLearnSpring.Services.Authentication.RegisterService;
-import com.anpk.firstDemoLearnSpring.dtos.inputs.Authenticator.RegisterRequest;
-import com.anpk.firstDemoLearnSpring.dtos.outputs.ApiResponse;
+import com.anpk.firstDemoLearnSpring.dtos.inputs.Authentication.RegisterRequest;
+import com.anpk.firstDemoLearnSpring.dtos.outputs.common.ApiResponse;
 import com.anpk.firstDemoLearnSpring.dtos.outputs.Register.RegisterUserResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

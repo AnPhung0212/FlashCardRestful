@@ -1,6 +1,6 @@
 package com.anpk.firstDemoLearnSpring.infrastructure.exception;
 
-import com.anpk.firstDemoLearnSpring.dtos.outputs.ApiResponse;
+import com.anpk.firstDemoLearnSpring.dtos.outputs.common.ApiResponse;
 import com.anpk.firstDemoLearnSpring.infrastructure.custom.BadRequestException;
 import com.anpk.firstDemoLearnSpring.infrastructure.custom.ConflictException;
 import com.anpk.firstDemoLearnSpring.infrastructure.custom.ResourceNotFoundException;

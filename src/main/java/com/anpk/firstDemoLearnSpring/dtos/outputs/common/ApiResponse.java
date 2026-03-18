@@ -1,6 +1,9 @@
-package com.anpk.firstDemoLearnSpring.dtos.outputs;
+package com.anpk.firstDemoLearnSpring.dtos.outputs.common;
 
-public class ApiResponse<T> {
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+@JsonInclude(JsonInclude.Include.NON_NULL) // Chỉ in ra trường data nếu nó không null
+public class    ApiResponse<T> {
 
     private String message;
     private T data;
