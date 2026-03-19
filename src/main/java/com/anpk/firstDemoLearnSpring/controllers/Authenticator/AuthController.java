@@ -2,12 +2,13 @@ package com.anpk.firstDemoLearnSpring.controllers.Authenticator;
 
 import com.anpk.firstDemoLearnSpring.Services.Authentication.RegisterService;
 import com.anpk.firstDemoLearnSpring.dtos.inputs.Authentication.RegisterRequest;
-import com.anpk.firstDemoLearnSpring.dtos.outputs.common.ApiResponse;
+import com.anpk.firstDemoLearnSpring.helpers.common.ApiResponse;
 import com.anpk.firstDemoLearnSpring.dtos.outputs.Register.RegisterUserResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +25,7 @@ public class AuthController {
 
         RegisterUserResponse data = registerService.register(request);
         ApiResponse<RegisterUserResponse> response =
-                new ApiResponse<>("Đăng ký thành công! Vui lòng kiểm tra email để xác thực tài khoản.", data);
+                new ApiResponse<>(HttpStatus.OK.value(), "Đăng ký thành công! Vui lòng kiểm tra email để xác thực tài khoản.", data);
 
         return ResponseEntity.ok(response);
     }
@@ -36,7 +37,7 @@ public class AuthController {
         registerService.verifyEmailToken(token);
 
         ApiResponse<String> response =
-                new ApiResponse<>("Xác thực tài khoản thành công! Bạn có thể đăng nhập.", null);
+                new ApiResponse<>(HttpStatus.OK.value(), "Xác thực tài khoản thành công! Bạn có thể đăng nhập.", null);
 
         return ResponseEntity.ok(response);
     }

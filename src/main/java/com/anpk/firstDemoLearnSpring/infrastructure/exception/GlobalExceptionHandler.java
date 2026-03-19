@@ -1,6 +1,6 @@
 package com.anpk.firstDemoLearnSpring.infrastructure.exception;
 
-import com.anpk.firstDemoLearnSpring.dtos.outputs.common.ApiResponse;
+import com.anpk.firstDemoLearnSpring.helpers.common.ApiResponse;
 import com.anpk.firstDemoLearnSpring.infrastructure.custom.BadRequestException;
 import com.anpk.firstDemoLearnSpring.infrastructure.custom.ConflictException;
 import com.anpk.firstDemoLearnSpring.infrastructure.custom.ResourceNotFoundException;
@@ -14,7 +14,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<ApiResponse<Object>> handleBadRequest(BadRequestException ex) {
 
-        ApiResponse<Object> response = new ApiResponse<>(ex.getMessage(), null);
+        ApiResponse<Object> response = new ApiResponse<>(HttpStatus.BAD_REQUEST.value(), ex.getMessage(), null);
 
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
@@ -24,7 +24,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ConflictException.class)
     public ResponseEntity<ApiResponse<Object>> handleConflict(ConflictException ex) {
 
-        ApiResponse<Object> response = new ApiResponse<>(ex.getMessage(), null);
+        ApiResponse<Object> response = new ApiResponse<>(HttpStatus.CONFLICT.value(), ex.getMessage(), null);
 
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
@@ -34,7 +34,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ApiResponse<Object>> handleNotFound(ResourceNotFoundException ex) {
 
-        ApiResponse<Object> response = new ApiResponse<>(ex.getMessage(), null);
+        ApiResponse<Object> response = new ApiResponse<>(HttpStatus.NOT_FOUND.value(), ex.getMessage(), null);
 
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
@@ -45,7 +45,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<Object>> handleGeneral(Exception ex) {
 
         ApiResponse<Object> response =
-                new ApiResponse<>("Internal server error", null);
+                new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(),"Internal server error", null);
 
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -54,7 +54,7 @@ public class GlobalExceptionHandler {
     // Bắt lỗi sai tham số (như cái PasswordValidator của bạn đang dùng)
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ApiResponse<Object>> handleIllegalArgument(IllegalArgumentException ex) {
-        ApiResponse<Object> response = new ApiResponse<>(ex.getMessage(), null);
+        ApiResponse<Object> response = new ApiResponse<>(HttpStatus.BAD_REQUEST.value(), ex.getMessage(), null);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
@@ -64,7 +64,7 @@ public class GlobalExceptionHandler {
         // In ra console để bạn còn biết lỗi gì mà sửa khi đang dev
         ex.printStackTrace();
 
-        ApiResponse<Object> response = new ApiResponse<>(ex.getMessage(), null);
+        ApiResponse<Object> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage(), null);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
 }

@@ -1,12 +1,9 @@
 package com.anpk.firstDemoLearnSpring.domain.Entity;
 
+import com.anpk.firstDemoLearnSpring.domain.Enum.AuthProvider;
 import com.anpk.firstDemoLearnSpring.domain.Enum.UserStatus;
 import com.anpk.firstDemoLearnSpring.domain.common.BaseEntity;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,13 +26,23 @@ public class User extends BaseEntity {
     @Column(nullable = false, unique = true, length = 100)
     private String email;
 
-    @Column(nullable = false)
     private String passwordHash;
+
+    // để lưu tk khi dky bằng Google/Facebook nên passwordHash có thể null
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private AuthProvider authProvider = AuthProvider.LOCAL;
+
+    // Lưu ID định danh mà Google/Facebook trả về để dễ dàng truy xuất sau này
+    @Column(length = 100)
+    private String providerId;
 
     // Quan hệ 1-n với Deck: Một User có nhiều Decks
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Deck> decks = new ArrayList<>();
+
     // trạng thái account: đã xác thực, chưa xác thực, bị ban
+    @Column(nullable = false)
     private UserStatus status;
 
 }
