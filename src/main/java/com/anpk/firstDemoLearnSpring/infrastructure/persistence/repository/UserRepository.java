@@ -25,5 +25,6 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     // Dùng để xóa user PENDING quá 24 giờ
     List<User> findByStatusAndCreatedAtBefore(UserStatus status, LocalDateTime createdAt);
 
+    Optional<User> findByEmail(String email);
 }
 

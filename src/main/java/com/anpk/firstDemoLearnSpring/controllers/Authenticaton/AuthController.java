@@ -1,4 +1,4 @@
-package com.anpk.firstDemoLearnSpring.controllers.Authenticator;
+package com.anpk.firstDemoLearnSpring.controllers.Authenticaton;
 
 import com.anpk.firstDemoLearnSpring.Services.Authentication.RegisterService;
 import com.anpk.firstDemoLearnSpring.dtos.inputs.Authentication.RegisterRequest;
