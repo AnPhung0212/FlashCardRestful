@@ -18,25 +18,25 @@ public class UserCleanupScheduler {
     private final UserCleanupService userCleanupService;
 
     /**
-     * Chạy mỗi 10 giây để test
-     * Sau khi test xong, đổi thành: fixedRate = 3600000 (mỗi 1 giờ)
+     * Chay moi 10 giay de test
+     * Sau khi test xong, doi thanh: fixedRate = 3600000 (moi 1 gio)
      */
     @Scheduled(fixedRate = 60000)
     public void cleanupExpiredPendingUsers() {
         try {
-            log.info("=== BẮT ĐẦU TÁC VỤ TỰ ĐỘNG: Xóa user PENDING quá hạn ===");
+            log.info("=== BAT DAU TAC VU TU DONG: Xoa user PENDING qua han ===");
 
             int deletedCount = userCleanupService.deleteExpiredPendingUsers();
 
             if (deletedCount > 0) {
-                log.info("Đã xóa {} user PENDING quá 24 giờ", deletedCount);
+                log.info("Da xoa {} user PENDING qua 24 gio", deletedCount);
             } else {
-                log.info("Không có user PENDING nào quá 24 giờ để xóa");
+                log.info("Khong co user PENDING nao qua 24 gio de xoa");
             }
 
-            log.info("=== KẾT THÚC TÁC VỤ TỰ ĐỘNG ===");
+            log.info("=== KET THUC TAC VU TU DONG ===");
         } catch (Exception e) {
-            log.error("LỖI khi chạy scheduled task cleanup user: {}", e.getMessage(), e);
+            log.error("LOI khi chay scheduled task cleanup user: {}", e.getMessage(), e);
         }
     }
 }

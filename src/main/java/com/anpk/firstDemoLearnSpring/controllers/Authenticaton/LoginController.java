@@ -50,7 +50,7 @@ public class LoginController {
                 .refreshToken(refreshToken.getToken())
                 .email(userDetails.getUsername())
                 .roles(userDetails.getAuthorities().stream()
-                        .map(item -> item.getAuthority())
+                        .map(item -> item.getAuthority().replace("ROLE_", ""))
                         .collect(Collectors.toList()))
                 .build());
     }
