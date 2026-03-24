@@ -3,6 +3,7 @@ package com.anpk.firstDemoLearnSpring.Services.Authentication;
 import com.anpk.firstDemoLearnSpring.Services.MailService.VerificationMailService;
 import com.anpk.firstDemoLearnSpring.domain.Entity.EmailVerificationToken;
 import com.anpk.firstDemoLearnSpring.domain.Entity.User;
+import com.anpk.firstDemoLearnSpring.domain.Enum.UserRole;
 import com.anpk.firstDemoLearnSpring.domain.Enum.UserStatus;
 import com.anpk.firstDemoLearnSpring.dtos.inputs.Authentication.RegisterRequest;
 import com.anpk.firstDemoLearnSpring.dtos.outputs.Register.RegisterUserResponse;
@@ -53,6 +54,7 @@ public class RegisterService {
         user.setEmail(request.getEmail());
         user.setPasswordHash(passwordHasher.hash(request.getPassword()));
         user.setStatus(UserStatus.PENDING);
+        user.setRole(UserRole.USER);
 
         userRepository.save(user);
 

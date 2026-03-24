@@ -1,6 +1,7 @@
 package com.anpk.firstDemoLearnSpring.domain.Entity;
 
 import com.anpk.firstDemoLearnSpring.domain.Enum.AuthProvider;
+import com.anpk.firstDemoLearnSpring.domain.Enum.UserRole;
 import com.anpk.firstDemoLearnSpring.domain.Enum.UserStatus;
 import com.anpk.firstDemoLearnSpring.domain.common.BaseEntity;
 import jakarta.persistence.*;
@@ -27,6 +28,10 @@ public class User extends BaseEntity {
     private String email;
 
     private String passwordHash;
+    
+    // Vai trò của user: USER, STAFF, ADMIN
+    @Enumerated(EnumType.STRING)
+    private UserRole role = UserRole.USER;
 
     // để lưu tk khi dky bằng Google/Facebook nên passwordHash có thể null
     @Enumerated(EnumType.STRING)

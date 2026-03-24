@@ -33,32 +33,32 @@ public class UserCleanupService {
     public int deleteExpiredPendingUsers() {
         LocalDateTime threshold = LocalDateTime.now().minusHours(24);
 
-        // Tìm tất cả user PENDING đã tạo quá 24 giờ
+        // Tim tat ca user PENDING da tao qua 24 gio
         List<User> expiredUsers = userRepository.findByStatusAndCreatedAtBefore(
                 UserStatus.PENDING,
                 threshold
         );
 
         if (expiredUsers.isEmpty()) {
-            log.info("Không có user PENDING nào quá hạn");
+            log.info("Khong co user PENDING nao qua han");
             return 0;
         }
         tokenRepository.deleteAllByUserIn(expiredUsers);
 
-        // Log thông tin các user sẽ bị xóa
+        // Log thong tin cac user se bi xoa
         expiredUsers.forEach(user ->
-            log.debug("Xóa user PENDING quá hạn: {} (email: {}, created: {})",
+            log.debug("Xoa user PENDING qua han: {} (email: {}, created: {})",
                 user.getUsername(),
                 user.getEmail(),
                 user.getCreatedAt()
             )
         );
 
-        // Xóa user (cascade sẽ tự động xóa verification token liên quan)
+        // Xoa user (cascade se tu dong xoa verification token lien quan)
         userRepository.deleteAll(expiredUsers);
 
         int deletedCount = expiredUsers.size();
-        log.info("Đã xóa {} user PENDING quá 24 giờ", deletedCount);
+        log.info("Da xoa {} user PENDING qua 24 gio", deletedCount);
 
         return deletedCount;
     }
@@ -72,22 +72,22 @@ public class UserCleanupService {
     public int deleteExpiredVerificationTokens() {
         LocalDateTime now = LocalDateTime.now();
 
-        // Tìm tất cả token đã hết hạn
+        // Tim tat ca token da het han
         List<EmailVerificationToken> expiredTokens = tokenRepository.findByExpiredAtBefore(now);
 
         if (expiredTokens.isEmpty()) {
-            log.info("Không có verification token nào đã hết hạn");
+            log.info("Khong co verification token nao da het han");
             return 0;
         }
 
-        // Log thông tin
-        log.debug("Tìm thấy {} verification token đã hết hạn", expiredTokens.size());
+        // Log thong tin
+        log.debug("Tim thay {} verification token da het han", expiredTokens.size());
 
-        // Xóa token
+        // Xoa token
         tokenRepository.deleteAll(expiredTokens);
 
         int deletedCount = expiredTokens.size();
-        log.info("Đã xóa {} verification token đã hết hạn", deletedCount);
+        log.info("Da xoa {} verification token da het han", deletedCount);
 
         return deletedCount;
     }
