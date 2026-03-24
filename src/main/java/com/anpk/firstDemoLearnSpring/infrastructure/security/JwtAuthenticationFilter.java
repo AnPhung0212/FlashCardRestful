@@ -18,6 +18,7 @@ import java.io.IOException;
 
 @Component
 @RequiredArgsConstructor
+// JwtAuthenticationFilter sẽ được Spring Security gọi cho mỗi request để kiểm tra xem có JWT hợp lệ trong header không rồi mới cho phép đi tiếp vào Controller
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;

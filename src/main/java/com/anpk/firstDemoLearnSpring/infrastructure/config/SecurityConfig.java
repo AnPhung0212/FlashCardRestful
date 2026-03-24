@@ -42,7 +42,8 @@ public class SecurityConfig {
                                 "/api/auth/**" // Cho phép các API Login/Register đi qua
                         ).permitAll()
                         .anyRequest().authenticated() // Các request khác bắt buộc phải có Token
-                );
+                )
+                .oauth2Login(oauth2 -> oauth2.defaultSuccessUrl("/login-success"));
 
 
         // Cắm filter JWT vào trước chốt chặn mặc định của Spring

@@ -14,7 +14,7 @@ import java.time.Instant;
 @AllArgsConstructor
 @Table(name = "refresh_tokens")
 public class RefreshToken extends BaseEntity {
-    @Column(nullable = false, unique = true, length = 50)
+    @Column(nullable = false, unique = true)
     private String token;
 
     // Instant là chuẩn của Java 8+ để lưu timestamp (tương đương UTC trong DB)

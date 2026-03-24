@@ -6,6 +6,9 @@ import com.anpk.firstDemoLearnSpring.dtos.inputs.Authentication.LoginRequest;
 import com.anpk.firstDemoLearnSpring.dtos.outputs.Authentication.TokenResponse;
 import com.anpk.firstDemoLearnSpring.infrastructure.security.CustomUserDetails;
 import com.anpk.firstDemoLearnSpring.infrastructure.security.JwtService;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,12 +25,14 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
+@Tag(name = "Login", description = "API quản lý người dùng đăng nhập và làm mới token")
 public class LoginController {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final RefreshTokenService refreshTokenService;
 
     @PostMapping("/login")
+    @Operation(summary = "Đăng nhập", description = "Đăng nhập vào hệ thống bằng email và password")
     public ResponseEntity<TokenResponse> login(@Valid @RequestBody LoginRequest request) {
 
         // 1. Xác thực Email và Password (Spring sẽ tự gọi CustomUserDetailsService để check)
