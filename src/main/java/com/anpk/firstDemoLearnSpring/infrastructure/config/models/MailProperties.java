@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 @Setter
 public class MailProperties {
     private String from;
-    private String verificationBaseUrl;
+    // Base URL chung của web, ví dụ: https://myapp.com
+    private String baseUrl;
 }
 

@@ -42,7 +42,7 @@ public class ResetPasswordService {
         tokenRepository.saveAndFlush(resetToken);
 
         // Gửi email
-               mailService.sendVerificationEmail(
+               mailService.sendResetPasswordEmail(
                 user.getEmail(),
                 user.getUsername(),
                 token

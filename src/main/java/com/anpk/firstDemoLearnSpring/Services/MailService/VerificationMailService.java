@@ -52,9 +52,13 @@ public class VerificationMailService {
     }
     // Hàm xây dựng URL xác thực dựa trên token để cho vào email gửi cho người dùng xác thực.
     private String buildVerificationUrl(String token) {
-        String baseUrl = mailProperties.getVerificationBaseUrl();
-        Assert.hasText(baseUrl, "Missing verification URL (app.mail.verification-base-url)");
-        return baseUrl.contains("?") ? baseUrl + "&token=" + token : baseUrl + "?token=" + token;
+        String baseUrl = mailProperties.getBaseUrl();
+        Assert.hasText(baseUrl, "Missing base URL (app.mail.base-url)");
+        // Đường dẫn xác thực tài khoản
+        String verifyPath = "/api/auth/verify";
+        String url = baseUrl.endsWith("/") ? baseUrl.substring(0, baseUrl.length() - 1) : baseUrl;
+        url += verifyPath;
+        return url + "?token=" + token;
     }
 
     // Hàm gửi email đặt lại mật khẩu cho người dùng khi họ yêu cầu reset password
@@ -90,8 +94,13 @@ public class VerificationMailService {
 
 // Hàm xây dựng URL đặt lại mật khẩu dựa trên token để cho vào email gửi cho người dùng khi họ yêu cầu reset password.
 private String buildResetPasswordUrl(String token) {
-    String baseUrl = "http://localhost:8080/api/auth/reset-password/confirm"; // hoặc lấy từ config
-    return baseUrl.contains("?") ? baseUrl + "&token=" + token : baseUrl + "?token=" + token;
-}   
+    String baseUrl = mailProperties.getBaseUrl();
+    Assert.hasText(baseUrl, "Missing base URL (app.mail.base-url)");
+    // Đường dẫn xác nhận đặt lại mật khẩu
+    String resetPath = "/api/auth/reset-password/confirm";
+    String url = baseUrl.endsWith("/") ? baseUrl.substring(0, baseUrl.length() - 1) : baseUrl;
+    url += resetPath;
+    return url + "?token=" + token;
+}
 
 }
