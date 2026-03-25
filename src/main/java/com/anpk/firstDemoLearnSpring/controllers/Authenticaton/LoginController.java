@@ -1,5 +1,6 @@
 package com.anpk.firstDemoLearnSpring.controllers.Authenticaton;
 
+import com.anpk.firstDemoLearnSpring.Services.Authentication.OAuth2Service;
 import com.anpk.firstDemoLearnSpring.Services.Authentication.RefreshTokenService;
 import com.anpk.firstDemoLearnSpring.domain.Entity.RefreshToken;
 import com.anpk.firstDemoLearnSpring.dtos.inputs.Authentication.LoginRequest;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +32,8 @@ public class LoginController {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final RefreshTokenService refreshTokenService;
+    private final OAuth2Service oauth2Service;
+
 
     @PostMapping("/login")
     @Operation(summary = "Đăng nhập", description = "Đăng nhập vào hệ thống bằng email và password")
@@ -58,5 +62,12 @@ public class LoginController {
                         .map(item -> item.getAuthority().replace("ROLE_", ""))
                         .collect(Collectors.toList()))
                 .build());
+    }
+    
+    // api xử lý đăng nhập OAuth2 thành công (nếu có)
+    @GetMapping("/oauth2/login-success")
+    @Operation(summary = "Đăng nhập OAuth2 thành công", description = "Xử lý đăng nhập OAuth2 thành công và trả về token")
+    public ResponseEntity<TokenResponse> loginSuccess(Authentication authentication) {
+    return ResponseEntity.ok(oauth2Service.handleOAuth2Login(authentication));
     }
 }

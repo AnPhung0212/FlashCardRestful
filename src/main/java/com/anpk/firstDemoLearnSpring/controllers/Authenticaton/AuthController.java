@@ -2,7 +2,9 @@ package com.anpk.firstDemoLearnSpring.controllers.Authenticaton;
 import org.springframework.security.core.Authentication;
 import com.anpk.firstDemoLearnSpring.Services.Authentication.OAuth2Service;
 import com.anpk.firstDemoLearnSpring.Services.Authentication.RegisterService;
+import com.anpk.firstDemoLearnSpring.Services.Authentication.ResetPasswordService;
 import com.anpk.firstDemoLearnSpring.dtos.inputs.Authentication.RegisterRequest;
+import com.anpk.firstDemoLearnSpring.dtos.inputs.Authentication.ResetPasswordRequest;
 import com.anpk.firstDemoLearnSpring.helpers.common.ApiResponse;
 import com.anpk.firstDemoLearnSpring.dtos.outputs.Authentication.TokenResponse;
 import com.anpk.firstDemoLearnSpring.dtos.outputs.Register.RegisterUserResponse;
@@ -21,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Authentication", description = "API quản lý xác thực và đăng ký tài khoản")
 public class AuthController {
     private final RegisterService registerService;
-    private final OAuth2Service oauth2Service;
+    private final ResetPasswordService resetPasswordService;
 
     @PostMapping("/register")
     @Operation(summary = "Đăng ký tài khoản mới", description = "Tạo tài khoản và gửi email xác thực")
@@ -45,9 +47,20 @@ public class AuthController {
 
         return ResponseEntity.ok(response);
     }
-    @GetMapping("/oauth2/login-success")
-    @Operation(summary = "Đăng nhập OAuth2 thành công", description = "Xử lý đăng nhập OAuth2 thành công và trả về token")
-    public ResponseEntity<TokenResponse> loginSuccess(Authentication authentication) {
-    return ResponseEntity.ok(oauth2Service.handleOAuth2Login(authentication));
-}
+     @PostMapping("/reset-password/request")
+     @Operation(summary = "Yêu cầu đặt lại mật khẩu", description = "Gửi email chứa link đặt lại mật khẩu")
+    public ResponseEntity<ApiResponse<String>> requestResetPassword(@RequestParam String email) {
+        resetPasswordService.requestResetPassword(email);
+        ApiResponse<String> response = new ApiResponse<>(HttpStatus.OK.value(), "Vui lòng kiểm tra email để lấy link đặt lại mật khẩu.", null);
+        return ResponseEntity.ok(response);
+    }
+
+    // API 2: Đổi mật khẩu bằng token
+    @PostMapping("/reset-password/confirm")
+    @Operation(summary = "Đặt lại mật khẩu", description = "Đổi mật khẩu bằng token")
+    public ResponseEntity<ApiResponse<String>> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
+        resetPasswordService.resetPassword(request);
+        ApiResponse<String> response = new ApiResponse<>(HttpStatus.OK.value(), "Đổi mật khẩu thành công.", null);
+        return ResponseEntity.ok(response);
+    }
 }
