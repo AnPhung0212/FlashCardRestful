@@ -38,5 +38,12 @@ public class Deck extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private DeckVisibility visibility = DeckVisibility.PRIVATE;
+
+    // Danh sách email user được share (PROTECTED)
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "deck_shared_emails", joinColumns = @JoinColumn(name = "deck_id"))
+    @Column(name = "email_shared")
+    private List<String> sharedEmails = new ArrayList<>();
+
 }
 
